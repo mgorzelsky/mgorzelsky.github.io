@@ -62,8 +62,8 @@ export default class EnemyFighter {
   Draw(ctx) {
     //ctx.save();
     ctx.translate(this.center.x, this.center.y);
-    if (this.center.x < 0 && this.center.y < 0) {
-      this.angle = this.angle + Math.PI;
+    if (this.game.ship.center.x < this.center.x && this.game.ship.center.y < this.center.y) {
+      this.angle = (this.angle + Math.PI);
       ctx.rotate(this.angle);
       ctx.drawImage(this.image, -(this.width / 2), -(this.height / 2));
       ctx.rotate(-this.angle);
