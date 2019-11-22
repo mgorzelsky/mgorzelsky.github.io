@@ -48,40 +48,54 @@ export default class EnemyFighter {
 
     // angle B
     //Calculate angle from enemy fighter to player in radians
-    this.angle = (Math.acos((magnitude ** 2 + this.fireVector.x ** 2 - this.fireVector.y ** 2) / Math.abs((2 * magnitude * this.fireVector.x)))); 
+    this.angle = this.CalculateOrientation(magnitude);
+    //this.angle = (Math.acos((magnitude ** 2 + this.fireVector.x ** 2 - this.fireVector.y ** 2) / (2 * magnitude * this.fireVector.x)));
 
     //Normalized values so that projectiles move the same speed regardless of distance to the target.
     this.fireVector.x = (this.fireVector.x / magnitude) * this.projectileSpeed;
     this.fireVector.y = (this.fireVector.y / magnitude) * this.projectileSpeed;
   }
 
+  CalculateOrientation(c) {
+    //TOP LEFT
+    if (this.game.ship.center.x < this.center.x && this.game.ship.center.y < this.center.y) {
+      return Math.acos((c ** 2 + this.fireVector.x ** 2 - this.fireVector.y ** 2) / Math.abs((2 * c * this.fireVector.x)));
+    }
+    //TOP RIGHT
+    else if(this.game.ship.center.x > this.center.x && this.game.ship.center.y < this.center.y) {
+      return Math.acos((c ** 2 + this.fireVector.x ** 2 - this.fireVector.y ** 2) / -(2 * c * this.fireVector.x));
+    }
+    //positive y
+    else {
+      return Math.acos((c ** 2 + this.fireVector.x ** 2 - this.fireVector.y ** 2) / (2 * c * this.fireVector.x));
+    }
+  }
+
   Fire() {
     this.game.CreateProjectile(this);
-  } 
+  }
 
   Draw(ctx) {
-    //ctx.save();
     ctx.translate(this.center.x, this.center.y);
+    //TOP LEFT
     if (this.game.ship.center.x < this.center.x && this.game.ship.center.y < this.center.y) {
-      this.angle = (this.angle + Math.PI);
-      ctx.rotate(this.angle);
+      ctx.rotate(this.angle + Math.PI);
       ctx.drawImage(this.image, -(this.width / 2), -(this.height / 2));
-      ctx.rotate(-this.angle);
-    } else {
+      ctx.rotate(-(this.angle + Math.PI));
+    }
+    //TOP RIGHT
+    else if (this.game.ship.center.x > this.center.x && this.game.ship.center.y < this.center.y) {
+      ctx.rotate(this.angle + Math.PI);
+      ctx.drawImage(this.image, -(this.width / 2), -(this.height / 2));
+      ctx.rotate(-(this.angle + Math.PI));
+    }
+    //BOTTOM 
+    else {
       ctx.rotate(this.angle);
       ctx.drawImage(this.image, -(this.width / 2), -(this.height / 2));
       ctx.rotate(-this.angle);
     }
     ctx.translate(-this.center.x, -this.center.y);
-    //ctx.restore();
-
-    // ctx.drawImage(
-    //   this.image,
-    //   this.position.x,
-    //   this.position.y,
-    //   this.width,
-    //   this.height
-    // );
   }
 
   Update(deltaTime) {
