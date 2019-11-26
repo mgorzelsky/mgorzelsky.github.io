@@ -15,6 +15,10 @@ export default class Game {
   constructor(gameWidth, gameHeight) {
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;
+
+    this.maxEnemiesOnScreen = 4;
+    this.enemyShipRespawnTimerTarget = 360; // every 60 seconds 
+    this.enemyShipRespawnTimer = 1;
   }
 
   // Initialize all of the starting parameters and create all of the objects.
@@ -23,7 +27,7 @@ export default class Game {
     
     this.enemyFighters = [];
     this.ship = new Ship(this);
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < this.maxEnemiesOnScreen; i++) {
       this.enemyFighters.push(new EnemyFighter(this));
     }
     this.gameObjects = [this.ship];
@@ -57,6 +61,19 @@ export default class Game {
     this.enemyFighters = this.enemyFighters.filter(
       object => !object.markedForDeletion
     );
+
+    if (this.enemyFighters.length === this.maxEnemiesOnScreen) {
+      this.enemyShipRespawnTimer = 1;
+    }
+    else if (this.enemyShipRespawnTimer === this.enemyShipRespawnTimerTarget 
+      && this.enemyFighters.length > 0 
+      && this.enemyFighters.length <= this.maxEnemiesOnScreen) {
+        this.enemyFighters.push(new EnemyFighter(this));
+        this.enemyShipRespawnTimer = 1;
+    }
+    else {
+      this.enemyShipRespawnTimer++;
+    }
   }
 
   // every object on the screen is responsible for drawing itself. This function goes through calls the respective Draw functions.
