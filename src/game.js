@@ -21,13 +21,13 @@ export default class Game {
 
   Start() {
     this.gameState = GAME_STATE.RUNNING;
-
+    
     this.ship = new Ship(this);
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 1; i++) {
       this.enemyFighters.push(new EnemyFighter(this));
     }
     this.gameObjects = [this.ship];
-
+    
     new InputHandler(this.ship, this);
   }
 

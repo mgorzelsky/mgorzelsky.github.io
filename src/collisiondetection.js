@@ -1,9 +1,17 @@
-export function DetectCollision(projectile, gameObject) {
-  let leftX = projectile.position.x;
-  let rightX = projectile.position.x + projectile.size;
-  let topY = projectile.position.y;
-  let bottomY = projectile.position.y + projectile.size;
+//Take in the two objects that are having their collision checked. The collidingObject is the object CALLING the function,
+//the gameObject is the object being checked against for collision.
+export function DetectCollision(collidingObject, gameObject) {
+  let leftX = collidingObject.position.x;
+  let rightX = collidingObject.position.x + collidingObject.width;
+  let topY = collidingObject.position.y;
+  let bottomY = collidingObject.position.y + collidingObject.height;
 
+  //If the collision is between the same type of object that created the projectile, discard it.
+  if (collidingObject.ID === gameObject.ID) {
+    return false;
+  }
+  //Check each corner of the collidingObject to see if it is within the gameObject. If it is, return true to indicate a
+  //collision has happened. 
   if (
     CheckWithinObject(leftX, topY, gameObject) ||
     CheckWithinObject(leftX, bottomY, gameObject) ||
