@@ -2,7 +2,7 @@ import { DetectCollision } from "./collisiondetection.js";
 
 export default class Ship {
   constructor(game) {
-    //Tell ship what is in the space
+    //Tell ship what the space looks like
     this.image = document.getElementById("img_playerShip");
 
     this.game = game;

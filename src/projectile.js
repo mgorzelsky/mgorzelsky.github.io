@@ -27,6 +27,8 @@ export default class Projectile {
     this.markedForDeletion = false;
   }
 
+  // Update the positional data of the projectile based on the vector information from the firing object and then check
+  // for collisions with any other game objects.
   Update(deltaTime) {
     this.position.x += this.vector.x / deltaTime;
     this.position.y += this.vector.y / deltaTime;

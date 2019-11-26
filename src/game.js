@@ -15,15 +15,15 @@ export default class Game {
   constructor(gameWidth, gameHeight) {
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;
-
-    this.enemyFighters = [];
   }
 
+  // Initialize all of the starting parameters and create all of the objects.
   Start() {
     this.gameState = GAME_STATE.RUNNING;
     
+    this.enemyFighters = [];
     this.ship = new Ship(this);
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 4; i++) {
       this.enemyFighters.push(new EnemyFighter(this));
     }
     this.gameObjects = [this.ship];
@@ -31,10 +31,12 @@ export default class Game {
     new InputHandler(this.ship, this);
   }
 
+  // The Game handles all of the objects so any projectiles fired are created here and put into the gameObjects array.
   CreateProjectile(origin) {
     this.gameObjects.push(new Projectile(origin));
   }
 
+  // State updates of all of the objects in the game.
   Update(deltaTime) {
     if (this.gameState === GAME_STATE.PAUSED) return;
     if (this.ship.markedForDeletion) {
@@ -57,6 +59,7 @@ export default class Game {
     );
   }
 
+  // every object on the screen is responsible for drawing itself. This function goes through calls the respective Draw functions.
   Draw(ctx) {
     ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
     this.gameObjects.forEach(object => object.Draw(ctx));
